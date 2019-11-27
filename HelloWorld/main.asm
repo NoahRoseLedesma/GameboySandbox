@@ -64,7 +64,7 @@ Start:
 SECTION "Data", ROM0
 
 FontTiles:
-	INCBIN "font.chr"
+	INCBIN "font.chr", 0, 2048
 FontTilesEnd:
 
 HelloWorldString:
