@@ -11,11 +11,13 @@ hello-world.gb: main.o memcpy.o print.o font.chr
 main.o: main.asm
 	rgbasm -o main.o main.asm
 
-memcpy.o: ../MemCpy/memcpy.o
+memcpy.o: ../MemCpy/
+	make -C ../MemCpy/
 	cp ../MemCpy/memcpy.o .
 
-print.o: ../print/print.o
-	cp ../print/print.o .
+print.o: ../print/
+	make -C ../print/
+	cp ../print/print.o . 
 
 example: hello-world-example.gb
 
