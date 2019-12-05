@@ -6,7 +6,7 @@
 ; Placing this subroutine in address $28 lets us use the reset instruction for calling.
 ; I think the purpose of doing this as opposed to a standard call is performance.
 ; Note: that doesnt seem to make sense. rst opcode takes 32 cycles, call takes 12
-SECTION "Copy Data",ROM0[$28]
+SECTION "Copy Data", ROM0
 COPY_DATA:
   ; pop return address off stack into hl
   pop hl
@@ -46,15 +46,14 @@ COPY_DATA:
   ; all done, return home
   pop bc
   jp  hl
-  reti
+  ret
 
 SECTION "DMA Subroutine", ROM0
 DMA_COPY:
   ; load de with the HRAM destination address
   ld  de,$FF80
 
-  ; whats this? read on..
-  rst $28
+  call COPY_DATA
 
   ; the amount of data we want to copy into HRAM, $000D which is 13 bytes
   DB  $00,$0D
