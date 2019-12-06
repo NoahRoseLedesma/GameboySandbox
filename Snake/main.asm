@@ -21,25 +21,8 @@ Start:
     ; Clear the background tile map
     call ClearBGTileMap
 
-    ; Print a debug string
-    ld de, DEBUG_STRING_0
-    ld hl, $9800 + 32 * 0
-    call StrCpy
-    ld de, DEBUG_STRING_1
-    ld hl, $9800 + 32 * 1
-    call StrCpy
-    ld de, DEBUG_STRING_2
-    ld hl, $9800 + 32 * 2
-    call StrCpy
-    ld de, DEBUG_STRING_3
-    ld hl, $9800 + 32 * 3
-    call StrCpy
-    ld de, DEBUG_STRING_4
-    ld hl, $9800 + 32 * 4
-    call StrCpy
-    ld de, DEBUG_STRING_5
-    ld hl, $9800 + 32 * 5
-    call StrCpy
+    ; Load the game border
+    call MakeBorder
 
     ; Select a palette
     ld a, %11100100
@@ -57,16 +40,59 @@ Start:
     halt
     halt
 
-SECTION "Vars", ROM0
-DEBUG_STRING_0:
-    DB TILE_BORDER_NW_CORNER, TILE_BORDER_N, TILE_BORDER_N, TILE_BORDER_N, TILE_BORDER_NE_CORNER, 0
-DEBUG_STRING_1:
-    DB TILE_BORDER_W, TILE_SNAKE_SE_CORNER, TILE_SNAKE_HORIZONTAL, TILE_SNAKE_SW_CORNER, TILE_BORDER_E, 0
-DEBUG_STRING_2:
-    DB TILE_BORDER_W, TILE_SNAKE_VERTICAL, TILE_SNAKE_S_HEAD, TILE_SNAKE_VERTICAL, TILE_BORDER_E, 0
-DEBUG_STRING_3:
-    DB TILE_BORDER_W, TILE_SNAKE_N_TAIL, TILE_SNAKE_NE_CORNER, TILE_SNAKE_NW_CORNER, TILE_BORDER_E, 0
-DEBUG_STRING_4:
-    DB TILE_BORDER_SW_CORNER, TILE_BORDER_S, TILE_BORDER_S, TILE_BORDER_S, TILE_BORDER_SE_CORNER, 0
-DEBUG_STRING_5:
-    DB " Hello World", 0
+MakeBorder:
+    ; Corners
+    ld hl, $9800
+    ld a, TILE_BORDER_NW_CORNER
+    ld [hl], a
+    
+    ld hl, $9800 + 19
+    ld a, TILE_BORDER_NE_CORNER
+    ld [hl], a
+
+    ld hl, $9800 + (32 * 14)
+    ld a, TILE_BORDER_SW_CORNER
+    ld [hl], a
+
+    ld hl, $9800 + (32 * 14) + 19
+    ld a, TILE_BORDER_SE_CORNER
+    ld [hl], a
+
+    ; Horizontal borders
+    ld hl, $9801
+    ld bc, 18
+    ld d, TILE_BORDER_N
+    call Fill
+
+    ld hl, $9801 + (32 * 14)
+    ld bc, 18
+    ld d, TILE_BORDER_S
+    call Fill
+
+    ; Vertical borders
+    ld hl, $9800 + 32
+    ld bc, 13
+.vertialBorderLoop
+    ld a, TILE_BORDER_W
+    ld [hl], a
+    ld a, l
+    add 19
+    ld l, a
+    ld a, h
+    adc 0
+    ld h, a
+    ld a, TILE_BORDER_E
+    ld [hl], a
+    ld a, l
+    add 32 - 19
+    ld l, a
+    ld a, h
+    adc 0
+    ld h, a
+    dec bc
+    ld a, b
+    or c
+    cp 0
+    jr nz, .vertialBorderLoop
+
+    ret
