@@ -24,6 +24,20 @@ ZeroOut:
     jr nz, ZeroOut
     ret
 
+; Fill a memory region with the specified byte
+; @param hl A pointer to the memory region
+; @param bc The number of bytes to write over
+; @param d  The byte to write
+Fill:
+    ld a, d
+    ld [hli], a
+    dec bc
+    ld a, b
+    or c
+    cp 0
+    jr NZ, Fill
+    ret
+
 ; Clears the backgound tile map
 ClearBGTileMap:
     ld hl, $9800
@@ -32,4 +46,5 @@ ClearBGTileMap:
     ret
 
 EXPORT WaitForVBlank
+EXPORT Fill
 EXPORT ClearBGTileMap
