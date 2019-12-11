@@ -43,7 +43,7 @@ Print:
 	
 	ret
 
-; Write a single character to the backgroun tile map
+; Write a single character to the background tile map
 ; Assumes that the CPU has lock on VRAM
 ; @param d The char to write
 ; @param b The X position to write the char
@@ -81,9 +81,51 @@ PutChar:
 
 	ld [hl], d
 
+	ret
+
+; Get a character from the background tile map
+; Assumes that the CPU has lock on VRAM
+; @param b The X position to write the char
+; @param c The Y position to write the char
+; @return d The char at the position
+GetChar:
+ld hl, 0
+
+	; hl = y * 32
+.multiplicationLoop:
+	ld a, c
+	or a
+	jr z, .endMultiplicationLoop
+
+	; Add 32 to the lower byte
+	ld a, l
+	add 32
+	ld l, a
+
+	; Add the carry bit to the high byte
+	ld a, h
+	adc 0
+	ld h, a
+
+	dec c
+	jr nz, .multiplicationLoop
+.endMultiplicationLoop:
+
+	; hl += x + background tile map start address
+	ld a, l
+	add b
+	ld l, a
+	ld a, h
+	adc $98
+	ld h, a
+
+	ld d, [hl]
+	ret
+
 ; Display the contents of the background tile map
 ; Display:
 
 
 EXPORT Print
 EXPORT PutChar
+EXPORT GetChar
