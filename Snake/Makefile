@@ -1,6 +1,6 @@
-SRCS = main.asm tiles.asm util.asm
+SRCS = main.asm tiles.asm util.asm snake.asm
 OBJS = $(SRCS:.asm=.o)
-LIB_OBJS = libs/MemCpy/memcpy.o
+LIB_OBJS = libs/MemCpy/memcpy.o libs/print/print.o
 
 ASSETS = AsciiFont.chr SnakeTiles.chr
 INCLUDES = TileGuide.inc hardware.inc
