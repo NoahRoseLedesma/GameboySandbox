@@ -11,6 +11,14 @@ WaitForVBlank:
     jr C, WaitForVBlank
     ret
 
+; Busy-wait until not VBlank
+WaitForNotVBlank:
+    ; Check that the scanline is out of the screen
+    ld a, [rLY]
+    cp 144
+    jr NC, WaitForNotVBlank
+    ret
+
 ; Zero out a memory region
 ; @param hl A pointer to the memory region to zero
 ; @param bc The number of bytes to zero out
@@ -46,5 +54,7 @@ ClearBGTileMap:
     ret
 
 EXPORT WaitForVBlank
+EXPORT WaitForNotVBlank
 EXPORT Fill
 EXPORT ClearBGTileMap
+EXPORT ZeroOut

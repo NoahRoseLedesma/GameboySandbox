@@ -24,6 +24,11 @@ Start:
     ; Load the game border
     call MakeBorder
 
+    ; Init the snake and its video data
+    call InitSnakeData
+    ld d, SNAKE_DIRECTION_EAST
+    call MoveSnake
+
     ; Select a palette
     ld a, %11100100
     ld [rBGP], a
@@ -37,8 +42,28 @@ Start:
     ld a, %10000001
     ld [rLCDC], a
 
-    halt
-    halt
+.loop
+    ld bc, $2
+.loop2
+    call WaitForVBlank
+    call WaitForNotVBlank
+    call WaitForVBlank
+    call WaitForNotVBlank
+    call WaitForVBlank
+    call WaitForNotVBlank
+    call WaitForVBlank
+    call WaitForNotVBlank
+    call WaitForVBlank
+    call WaitForNotVBlank
+    dec bc
+    ld a, b
+    or c
+    jr NZ, .loop2
+
+    call WaitForVBlank
+    call GetInputDirection ; d = Snake direction
+    call MoveSnake
+    jr .loop
 
 MakeBorder:
     ; Corners
