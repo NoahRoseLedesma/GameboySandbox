@@ -21,6 +21,21 @@ Start:
     ; Clear the background tile map
     call ClearBGTileMap
 
+    ; Select a palette
+    ld a, %11100100
+    ld [rBGP], a
+    ; Reset scroll
+    xor a
+    ld [rSCY], a
+    ld [rSCX], a 
+    ; Shut sound down
+    ld [rNR52], a
+
+    ; Display the splash screen
+    call DoSplashScreen
+
+    halt
+    
     ; Load the game border
     call MakeBorder
 
@@ -29,16 +44,7 @@ Start:
     ld d, SNAKE_DIRECTION_EAST
     call MoveSnake
 
-    ; Select a palette
-    ld a, %11100100
-    ld [rBGP], a
-    ; Reset scanlines
-    xor a
-    ld [rSCY], a
-    ld [rSCX], a 
-    ; Shut sound down
-    ld [rNR52], a
-    ; Turn screen on, display background
+    ; Turn screen on to display background
     ld a, %10000001
     ld [rLCDC], a
 

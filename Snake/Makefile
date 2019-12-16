@@ -1,4 +1,4 @@
-SRCS = main.asm tiles.asm util.asm snake.asm
+SRCS = main.asm tiles.asm util.asm snake.asm splashscreen.asm
 OBJS = $(SRCS:.asm=.o)
 LIB_OBJS = libs/MemCpy/memcpy.o libs/print/print.o
 
@@ -13,7 +13,7 @@ run:
 	../SameBoy/sameboy snake.gb
 
 $(TARGET): $(OBJS) $(INCLUDES)
-	rgblink -o $(TARGET) $(OBJS) $(LIB_OBJS)
+	rgblink -o $(TARGET) $(OBJS) $(LIB_OBJS) 
 	rgbfix -v -p 0 $(TARGET)
 
 $(OBJS): %o : %asm

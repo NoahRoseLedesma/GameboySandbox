@@ -396,7 +396,7 @@ FixInputDirection:
 
     cp d
     jr NZ, .InputFixed
-    
+
     ld d, [hl]
 .InputFixed
     ret
@@ -411,3 +411,4 @@ EXPORT PushHead
 EXPORT PopTail
 EXPORT MoveSnake
 EXPORT GetInputDirection
+EXPORT FixInputDirection
