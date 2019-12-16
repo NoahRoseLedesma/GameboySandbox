@@ -47,14 +47,16 @@ Start:
     ld [rLCDC], a
 
 .loop
-    ld bc, $2
+    ld bc, $6
 .loop2
-    ; While we wait for v-blank get input
-    ld a, [rLY]
+    push bc
+.waiting
     call GetInputDirection ; d = Snake direction
+    ld a, [rLY]
     cp 144
-    jr C, loop2
+    jr C, .waiting
     call WaitForNotVBlank
+    pop bc
     dec bc
     ld a, b
     or c
