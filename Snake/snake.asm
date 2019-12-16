@@ -211,10 +211,7 @@ MoveSnake:
     call PutChar
     call PopTail
 
-; Add a sprite for the new head
-    ld hl, SNAKE_DIRECTION
-    ld d, [hl]
-
+; Check if we have run into anything
     ld hl, SNAKE_HEAD
     ld b, [hl]
     inc hl
@@ -224,6 +221,18 @@ MoveSnake:
     ld b, [hl] ; X
     inc hl
     ld c, [hl] ; Y
+    push bc
+    call GetChar
+    ld a, d
+    cp 0
+    jr Z, .SnakeDidNotCollide
+
+    rst $0 ; Restart the game
+.SnakeDidNotCollide
+; Add a sprite for the new head
+    ld hl, SNAKE_DIRECTION
+    ld d, [hl]
+    pop bc
     call PutChar
 
 ; Change the sprite of the old head
