@@ -34,8 +34,6 @@ Start:
     ; Display the splash screen
     call DoSplashScreen
 
-    halt
-    
     ; Load the game border
     call MakeBorder
 
