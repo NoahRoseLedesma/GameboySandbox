@@ -380,6 +380,27 @@ GetInputDirection:
     ld d, [hl]
     ret
 
+; If the direction is invalid (opposite from the current direction), this
+; method sets the direction to be unchanged.
+; @param d The direction of the snake
+; @return d The fixed direction of the snake
+FixInputDirection:
+    ld hl, SNAKE_DIRECTION
+    ld a, [hl]
+
+    sub (SNAKE_DIRECTION_NORTH + 2)
+    jr NC, .NoBorrow
+    add (SNAKE_DIRECTION_WEST - SNAKE_DIRECTION_NORTH + 1)
+.NoBorrow
+    add SNAKE_DIRECTION_NORTH
+
+    cp d
+    jr NZ, .InputFixed
+    
+    ld d, [hl]
+.InputFixed
+    ret
+        
 EXPORT SNAKE_DIRECTION_NORTH
 EXPORT SNAKE_DIRECTION_EAST
 EXPORT SNAKE_DIRECTION_SOUTH

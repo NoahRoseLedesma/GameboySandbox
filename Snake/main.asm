@@ -62,6 +62,7 @@ Start:
 
     call WaitForVBlank
     call GetInputDirection ; d = Snake direction
+    call FixInputDirection ; d = Fixed direction
     call MoveSnake
     jr .loop
 
