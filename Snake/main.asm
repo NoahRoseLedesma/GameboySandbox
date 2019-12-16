@@ -49,15 +49,11 @@ Start:
 .loop
     ld bc, $2
 .loop2
-    call WaitForVBlank
-    call WaitForNotVBlank
-    call WaitForVBlank
-    call WaitForNotVBlank
-    call WaitForVBlank
-    call WaitForNotVBlank
-    call WaitForVBlank
-    call WaitForNotVBlank
-    call WaitForVBlank
+    ; While we wait for v-blank get input
+    ld a, [rLY]
+    call GetInputDirection ; d = Snake direction
+    cp 144
+    jr C, loop2
     call WaitForNotVBlank
     dec bc
     ld a, b
@@ -65,7 +61,6 @@ Start:
     jr NZ, .loop2
 
     call WaitForVBlank
-    call GetInputDirection ; d = Snake direction
     call FixInputDirection ; d = Fixed direction
     call MoveSnake
     jr .loop
